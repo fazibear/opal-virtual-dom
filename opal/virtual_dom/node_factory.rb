@@ -1,4 +1,4 @@
-class VirtualDOM
+module VirtualDOM
   class NodeFactory
     attr_reader :nodes
 
