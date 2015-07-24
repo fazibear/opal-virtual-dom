@@ -4,7 +4,7 @@ require 'virtual_dom/node_factory'
 
 module VirtualDOM
   def virtual_dom(&block)
-    NodeFactory.new(block).nodes
+    NodeFactory.new(block, self).nodes.first
   end
 
   module_function
