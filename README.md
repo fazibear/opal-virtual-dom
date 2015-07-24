@@ -1,6 +1,6 @@
-# virtual-dom support for Opal
+# Virtual Dom support for Opal
 [![Gem Version](https://badge.fury.io/rb/opal-virtual-dom.svg)](http://badge.fury.io/rb/opal-virtual-dom)
-[![Code Climate](https://codeclimate.com/github/fazibear/opal-virtual-dom/badges/gpa.svg)](https://codeclimate.com/github/fazibear/opal-virtual-dom) 
+[![Code Climate](https://codeclimate.com/github/fazibear/opal-virtual-dom/badges/gpa.svg)](https://codeclimate.com/github/fazibear/opal-virtual-dom)
 
 ## requiments
 
@@ -26,7 +26,7 @@ Browser side
 require 'opal'
 require 'virtual-dom' # javascript library
 require 'browser'     # not required
-require 'virtual_dom' # opal wrapper 
+require 'virtual_dom' # opal wrapper
 
 class SampleList
   include VirtualDOM
