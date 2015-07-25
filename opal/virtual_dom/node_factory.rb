@@ -1,45 +1,5 @@
 module VirtualDOM
   class NodeFactory
-    attr_reader :nodes
-
-    def initialize(dom, _self)
-      @nodes = []
-      @self = _self
-      instance_eval(&dom)
-    end
-
-    def method_missing(name, *args, &block)
-      if @self.send(:respond_to?, name)
-        @self.send(name, *args, &block)
-      elsif name == 'text'
-        @nodes << VirtualTextNode.new(args.first).vnode
-      elsif HTML_TAGS.include?(name)
-        @nodes << VirtualNode.new(name, params(args), childrens(args, block)).vnode
-      else
-        super
-      end
-    end
-
-    def params(args)
-      if args.first.is_a?(Hash)
-        args = args.first
-        args['className'] = args.delete('class') if args.keys.include?('class')
-        args
-      else
-        {}
-      end
-    end
-
-    def childrens(args, block)
-      if block
-        NodeFactory.new(block, @self).nodes
-      elsif args.last.is_a?(String)
-        [VirtualTextNode.new(args.last).vnode]
-      else
-        []
-      end
-    end
-
     HTML_TAGS = %w(
       a abbr address area article aside audio
       b base bdi bdo blockquote body br button
@@ -54,7 +14,7 @@ module VirtualDOM
       map mark menu meta meter
       nav noscript
       object ol optgroup option output
-      p param pre progress
+      param pre progress
       q
       rp rt ruby
       s samp script section select small source span strong style sub summary sup
@@ -63,5 +23,44 @@ module VirtualDOM
       vav video
       wbr
     )
+
+    attr_reader :nodes
+
+    def initialize(dom, parent)
+      @nodes = []
+      @parent = parent
+      instance_eval(&dom)
+    end
+
+    HTML_TAGS.each do |tag|
+      define_method tag do |params, &block|
+        @nodes << VirtualNode.new(
+          tag,
+          process_params(params),
+          block ? NodeFactory.new(block, @parent).nodes : []
+        ).vnode
+      end
+    end
+
+    def text(string)
+      @nodes << VirtualTextNode.new(string).vnode
+    end
+
+    def method_missing(name, *args, &block)
+      if @parent.send(:respond_to?, name)
+        @parent.send(name, *args, &block)
+      else
+        super
+      end
+    end
+
+    def process_params(params)
+      if params && params.is_a?(Hash)
+        params['className'] = params.delete('class') if params.keys.include?('class')
+        params
+      else
+        {}
+      end
+    end
   end
 end
