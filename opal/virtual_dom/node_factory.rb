@@ -11,12 +11,10 @@ module VirtualDOM
     def method_missing(name, *args, &block)
       if @self.send(:respond_to?, name)
         @self.send(name, *args, &block)
+      elsif name == 'text'
+        @nodes << VirtualTextNode.new(args.first).vnode
       elsif HTML_TAGS.include?(name)
-        @nodes << if name == 'text'
-                    VirtualTextNode.new(args.first).vnode
-                  else
-                    VirtualNode.new(name, params(args), childrens(args, block)).vnode
-                  end
+        @nodes << VirtualNode.new(name, params(args), childrens(args, block)).vnode
       else
         super
       end
