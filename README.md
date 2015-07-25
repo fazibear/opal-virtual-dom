@@ -49,8 +49,8 @@ class SampleList
 end
 
 $document.ready do
-  list = SampleList.new(%w(one two three)).render.first
-  back = SampleList.new(%w(three two one)).render.first
+  list = SampleList.new(%w(one two three)).render
+  back = SampleList.new(%w(three two one)).render
 
   root_node = VirtualDOM.create(list)
   $document.body.inner_dom = root_node
