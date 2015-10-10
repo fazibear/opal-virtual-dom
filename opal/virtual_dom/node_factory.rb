@@ -14,7 +14,7 @@ module VirtualDOM
       map mark menu meta meter
       nav noscript
       object ol optgroup option output
-      param pre progress
+      p param pre progress
       q
       rp rt ruby
       s samp script section select small source span strong style sub summary sup
@@ -56,8 +56,14 @@ module VirtualDOM
 
     def process_params(params)
       if params && params.is_a?(Hash)
-        params['className'] = params.delete('class') if params.keys.include?('class')
-        params
+        params.each do |k, v|
+          case k
+          when 'class'
+            params['className'] = params.delete('class')
+          when /^on/
+            params[k] = ->(e) { v.call(Native(e)) }
+          end
+        end
       else
         {}
       end
