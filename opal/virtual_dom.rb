@@ -1,23 +1,10 @@
 require 'virtual_dom/virtual_node'
 require 'virtual_dom/virtual_text_node'
 require 'virtual_dom/node_factory'
+require 'virtual_dom/wrapper'
+require 'virtual_dom/dom'
 
 module VirtualDOM
-  def virtual_dom(&block)
-    NodeFactory.new(block, self).nodes.first
-  end
-
-  module_function
-
-  def create(vnode)
-    `virtualDom.create(#{vnode})`
-  end
-
-  def diff(old, new)
-    `virtualDom.diff(#{old}, #{new})`
-  end
-
-  def patch(dom, diff)
-    `virtualDom.patch(#{dom}, #{diff})`
-  end
+  include VirtualDOM::DOM
+  extend VirtualDOM::Wrapper
 end
