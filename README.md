@@ -41,7 +41,9 @@ class SampleList
     virtual_dom do
       ul class: 'simple-list' do
         elements.each do |string|
-          li string
+          li do
+            text string
+          end
         end
       end
     end
