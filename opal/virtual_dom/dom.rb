@@ -45,7 +45,7 @@ module VirtualDOM
       end
     end
 
-    # for backwards compatibile
+    # for backwards compatibility
     def virtual_dom(&block)
       block.call
     end
