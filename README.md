@@ -31,19 +31,15 @@ require 'virtual_dom' # opal wrapper
 class SampleList
   include VirtualDOM
 
-  attr_reader :elements
-
   def initialize(elements = [])
     @elements = elements
   end
 
   def render
-    virtual_dom do
-      ul class: 'simple-list' do
-        elements.each do |string|
-          li do
-            text string
-          end
+    ul class: 'simple-list' do
+      @elements.each do |string|
+        li do
+          text string
         end
       end
     end
