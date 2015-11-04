@@ -15,7 +15,7 @@ module VirtualDOM
         if block
           current = @__virtual_nodes__
           @__virtual_nodes__ = []
-          result = block.call
+          result = block.call || ''
           vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count == 0 ? result : @__virtual_nodes__).vnode
           @__virtual_nodes__ = current
         else
