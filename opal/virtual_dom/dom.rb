@@ -16,33 +16,31 @@ module VirtualDOM
           current = @__virtual_nodes__
           @__virtual_nodes__ = []
           result = block.call || ''
-          vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count == 0 ? result : @__virtual_nodes__).vnode
+          vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count == 0 ? result : @__virtual_nodes__).to_n
           @__virtual_nodes__ = current
         else
-          vnode = VirtualNode.new(tag, process_params(params), []).vnode
+          vnode = VirtualNode.new(tag, process_params(params), []).to_n
         end
         @__virtual_nodes__ << vnode
         vnode
       end
     end
 
-    def text(string)
-      @__virtual_nodes__ << VirtualTextNode.new(string).vnode
+    def process_params(params)
+      return {} unless params.is_a?(Hash)
+      params.each do |k, v|
+        case k
+        when 'class'
+          params['className'] = params.delete('class')
+        when /^on/
+          params[k] = ->(e) { v.call(Native(e)) }
+        end
+      end
     end
 
-    def process_params(params)
-      if params && params.is_a?(Hash)
-        params.each do |k, v|
-          case k
-          when 'class'
-            params['className'] = params.delete('class')
-          when /^on/
-            params[k] = ->(e) { v.call(Native(e)) }
-          end
-        end
-      else
-        {}
-      end
+    # for backwards compatibility, you can return string
+    def text(string)
+      @__virtual_nodes__ << string.to_s
     end
 
     # for backwards compatibility

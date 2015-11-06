@@ -6,7 +6,7 @@ module VirtualDOM
       @childrens = childrens
     end
 
-    def vnode
+    def to_n
       `virtualDom.h(#{@name}, #{@params.to_n}, #{@childrens})`
     end
 
@@ -15,11 +15,10 @@ module VirtualDOM
     end
 
     def to_s_params
-      if @params.any?
-        " " + @params.map do |k,v|
-          "#{k}=\"#{v}\""
-        end.join(' ')
-      end
+      return unless @params.any?
+      ' ' + @params.map do |k, v|
+        "#{k}=\"#{v}\""
+      end.join(' ')
     end
   end
 end

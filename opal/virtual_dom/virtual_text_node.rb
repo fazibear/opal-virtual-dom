@@ -4,7 +4,7 @@ module VirtualDOM
       @text = text
     end
 
-    def vnode
+    def to_n
       @text.to_s
     end
 
