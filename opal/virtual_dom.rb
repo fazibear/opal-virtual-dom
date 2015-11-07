@@ -1,5 +1,4 @@
 require 'virtual_dom/virtual_node'
-require 'virtual_dom/virtual_text_node'
 require 'virtual_dom/wrapper'
 require 'virtual_dom/dom'
 
