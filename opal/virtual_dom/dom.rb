@@ -28,7 +28,7 @@ module VirtualDOM
 
     def process_params(params)
       return {} unless params.is_a?(Hash)
-      params.each do |k, v|
+      params.dup.each do |k, v|
         case k
         when 'class'
           params['className'] = params.delete('class')
@@ -36,6 +36,7 @@ module VirtualDOM
           params[k] = ->(e) { v.call(Native(e)) }
         end
       end
+      params
     end
 
     # for backwards compatibility, you can return string
