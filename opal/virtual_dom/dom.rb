@@ -32,11 +32,29 @@ module VirtualDOM
         case k
         when 'class'
           params['className'] = params.delete('class')
+        when 'data'
+          params['dataset'] = params.delete('data')
+        when 'default'
+          params['defaultValue'] = params.delete('default')
         when /^on/
-          params[k] = ->(e) { v.call(Native(e)) }
+          params[k] = event_callback(v)
         end
       end
       params
+    end
+
+    if defined?(Browser::Event)
+      def event_callback(v)
+        proc do |e|
+          v.call(Browser::Event.new(e))
+        end
+      end
+    else
+      def event_callback(v)
+        proc do |e|
+          v.call(Native(e))
+        end
+      end
     end
 
     # for backwards compatibility, you can return string
