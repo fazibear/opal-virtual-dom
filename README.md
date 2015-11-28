@@ -2,16 +2,6 @@
 [![Gem Version](https://badge.fury.io/rb/opal-virtual-dom.svg)](http://badge.fury.io/rb/opal-virtual-dom)
 [![Code Climate](https://codeclimate.com/github/fazibear/opal-virtual-dom/badges/gpa.svg)](https://codeclimate.com/github/fazibear/opal-virtual-dom)
 
-## requiments
-
-This wrapper require to load [virtual-dom](https://github.com/Matt-Esch/virtual-dom) first. For example you can use rails assets.
-
-```ruby
-source 'https://rails-assets.org' do
-  gem 'rails-assets-virtual-dom'
-end
-```
-
 ## usage
 
 Server side (config.ru, Rakefile, Rails, Sinatra, etc.)
@@ -24,9 +14,8 @@ Browser side
 
 ```ruby
 require 'opal'
-require 'virtual-dom' # javascript library
 require 'browser'     # not required
-require 'virtual_dom' # opal wrapper
+require 'virtual-dom'
 
 class SampleList
   include VirtualDOM
