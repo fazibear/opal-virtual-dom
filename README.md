@@ -19,7 +19,10 @@ Browser side
 ```ruby
 require 'opal'
 require 'browser'     # not required
-require 'virtual-dom'
+require 'virtual_dom'
+
+# if you're using broser and you want to have events and elements wrapped
+require 'virtual_dom/external_support/browser'
 
 class SampleList
   include VirtualDOM
@@ -28,8 +31,12 @@ class SampleList
     @elements = elements
   end
 
+  def after_render(node, name, previous)
+    puts "I'm in DOM"
+  end
+
   def render
-    ul class: 'simple-list' do
+    ul class: 'simple-list', hook: Hook.method(:after_render) do
       @elements.each do |string|
         li do
           text string

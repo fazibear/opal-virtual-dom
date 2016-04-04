@@ -43,17 +43,9 @@ module VirtualDOM
       params
     end
 
-    if defined?(Browser::Event)
-      def event_callback(v)
-        proc do |e|
-          v.call(Browser::Event.new(e))
-        end
-      end
-    else
-      def event_callback(v)
-        proc do |e|
-          v.call(Native(e))
-        end
+    def event_callback(v)
+      proc do |e|
+        v.call(ExternalSupport.wrap_event(e))
       end
     end
 
