@@ -31,12 +31,12 @@ class SampleList
     @elements = elements
   end
 
-  def after_render(node, name, previous)
+  def create_hook(node, name, previous)
     puts "I'm created: #{node}"
   end
 
   def render
-    ul class: 'simple-list', hook: Hook.method(:after_render) do
+    ul class: 'simple-list', hook: Hook.method(:create_hook) do
       @elements.each do |string|
         li do
           text string
