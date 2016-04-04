@@ -32,7 +32,7 @@ class SampleList
   end
 
   def after_render(node, name, previous)
-    puts "I'm in DOM"
+    puts "I'm created: #{node}"
   end
 
   def render
