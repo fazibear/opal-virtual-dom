@@ -45,7 +45,7 @@ module VirtualDOM
 
     def event_callback(v)
       proc do |e|
-        v.call(ExternalSupport.wrap_event(e))
+        v.call(Support.wrap_event(e))
       end
     end
 

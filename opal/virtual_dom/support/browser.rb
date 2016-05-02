@@ -1,5 +1,5 @@
 module VirtualDOM
-  module ExternalSupport
+  module Support
     module_function
 
     def wrap_node(node)

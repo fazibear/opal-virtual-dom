@@ -15,7 +15,7 @@ module VirtualDOM
     end
 
     def call_block(node, name, previous)
-      node = ExternalSupport.wrap_node(node)
+      node = Support.wrap_node(node)
       name = Native(name)
       previous = Native(previous)
       @block.call(node, name, previous)
