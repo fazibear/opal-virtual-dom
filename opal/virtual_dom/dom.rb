@@ -10,7 +10,7 @@ module VirtualDOM
                   thead time title tr track u ul var video wbr)
 
     HTML_TAGS.each do |tag|
-      define_method tag do |params, &block|
+      define_method tag do |params = {}, &block|
         @__virtual_nodes__ ||= []
         if block
           current = @__virtual_nodes__
