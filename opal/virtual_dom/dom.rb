@@ -18,6 +18,8 @@ module VirtualDOM
           result = block.call || ''
           vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count == 0 ? result : @__virtual_nodes__).to_n
           @__virtual_nodes__ = current
+        elsif params.is_a?(String)
+          vnode = VirtualNode.new(tag, {}, [params]).to_n
         else
           vnode = VirtualNode.new(tag, process_params(params), []).to_n
         end
