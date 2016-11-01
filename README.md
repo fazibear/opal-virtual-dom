@@ -41,7 +41,7 @@ class SampleList
     # use bang method to define element id
 
     p.id! do
-      ul.simple-list.list hook: Hook.method(:create_hook) do
+      ul.simple_list.list(hook: Hook.method(method(:create_hook))) do
         @elements.each do |string|
           li do
             text string
@@ -53,8 +53,8 @@ class SampleList
 end
 
 $document.ready do
-  list = SampleList.new(%w(one two three)).render
-  back = SampleList.new(%w(three two one)).render
+  list = SampleList.new(%w(one two three)).render.to_vnode
+  back = SampleList.new(%w(three two one)).render.to_vnode
 
   root_node = VirtualDOM.create(list)
   $document.body.inner_dom = root_node

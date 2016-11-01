@@ -29,7 +29,7 @@ module VirtualDOM
         vnode = VirtualNode.new(tag, process_params(params), [])
       end
       @__last_virtual_node__ = vnode
-      @__virtual_nodes__ << @__last_virtual_node__.to_n
+      @__virtual_nodes__ << to_vnode
       self
     end
 
@@ -87,6 +87,10 @@ module VirtualDOM
     # for backwards compatibility
     def virtual_dom(&block)
       block.call
+    end
+
+    def to_vnode
+      @__last_virtual_node__.to_n
     end
   end
 end
