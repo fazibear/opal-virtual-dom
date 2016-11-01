@@ -11,22 +11,50 @@ module VirtualDOM
 
     HTML_TAGS.each do |tag|
       define_method tag do |params = {}, &block|
-        @__virtual_nodes__ ||= []
-        if block
-          current = @__virtual_nodes__
-          @__virtual_nodes__ = []
-          result = block.call || ''
-          vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count == 0 ? result : @__virtual_nodes__).to_n
-          @__virtual_nodes__ = current
-        elsif params.is_a?(String)
-          vnode = VirtualNode.new(tag, {}, [params]).to_n
-        else
-          vnode = VirtualNode.new(tag, process_params(params), []).to_n
-        end
-        @__virtual_nodes__ << vnode
-        vnode
+        process_tag(tag, params, block)
       end
     end
+
+    def process_tag(tag, params, block)
+      @__virtual_nodes__ ||= []
+      if block
+        current = @__virtual_nodes__
+        @__virtual_nodes__ = []
+        result = block.call || ''
+        vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count.zero? ? result : @__virtual_nodes__)
+        @__virtual_nodes__ = current
+      elsif params.is_a?(String)
+        vnode = VirtualNode.new(tag, {}, [params])
+      else
+        vnode = VirtualNode.new(tag, process_params(params), [])
+      end
+      @__last_virtual_node__ = vnode
+      @__virtual_nodes__ << @__last_virtual_node__.to_n
+      self
+    end
+
+    def method_missing(clazz, params = {}, &block)
+      @__virtual_nodes__.pop
+      class_params = @__last_virtual_node__.params.delete(:className)
+      method_params = if clazz.end_with?('!')
+                        { id: clazz[0..-2],
+                          class: merge_string(class_params, params[:class]) }
+                      else
+                        { class: merge_string(class_params, params[:class], clazz) }
+                      end
+      params = @__last_virtual_node__.params.merge(params).merge(method_params)
+      process_tag(@__last_virtual_node__.name, params, block)
+    end
+
+    def merge_string(*params)
+      arr = []
+      params.each do |string|
+        next unless string
+        arr << string.split(' ')
+      end
+      arr.join(' ')
+    end
+
 
     def process_params(params)
       return {} unless params.is_a?(Hash)

@@ -36,10 +36,16 @@ class SampleList
   end
 
   def render
-    ul class: 'simple-list', hook: Hook.method(:create_hook) do
-      @elements.each do |string|
-        li do
-          text string
+    # You can use chained methods
+    # to add class to elements
+    # use bang method to define element id
+
+    p.id! do
+      ul.simple-list.list hook: Hook.method(:create_hook) do
+        @elements.each do |string|
+          li do
+            text string
+          end
         end
       end
     end

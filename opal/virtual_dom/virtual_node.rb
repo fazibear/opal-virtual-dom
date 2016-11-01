@@ -1,5 +1,9 @@
 module VirtualDOM
   class VirtualNode
+    #include VirtualDOM::DOM
+
+    attr_reader :name, :params, :children
+
     def initialize(name, params = {}, children = [])
       @name = name
       @params = params
@@ -11,7 +15,7 @@ module VirtualDOM
     end
 
     def to_s
-      "<#{@name}#{to_s_params}>#{@children.map(&:to_s).join}</#{@name}>"
+      "<#{@name}#{to_s_params}>#{to_s_children}</#{@name}>"
     end
 
     def to_s_params
@@ -19,6 +23,14 @@ module VirtualDOM
       ' ' + @params.map do |k, v|
         "#{k}=\"#{v}\""
       end.join(' ')
+    end
+
+    def to_s_children
+      return @children if @children.is_a?(String)
+      return unless @children.any?
+      @children
+        .map(&:to_s)
+        .join
     end
   end
 end
