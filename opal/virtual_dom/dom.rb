@@ -29,7 +29,7 @@ module VirtualDOM
         vnode = VirtualNode.new(tag, process_params(params), [])
       end
       @__last_virtual_node__ = vnode
-      @__virtual_nodes__ << to_vnode
+      @__virtual_nodes__ << @__last_virtual_node__.to_n
       self
     end
 
@@ -90,7 +90,11 @@ module VirtualDOM
     end
 
     def to_vnode
-      @__last_virtual_node__.to_n
+      if @__virtual_nodes__.one?
+        @__virtual_nodes__.first
+      else
+        VirtualNode.new('div', {}, @__virtual_nodes__).to_n
+      end
     end
   end
 end
