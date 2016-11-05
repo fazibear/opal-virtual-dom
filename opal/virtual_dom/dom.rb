@@ -34,8 +34,8 @@ module VirtualDOM
     end
 
     def method_missing(clazz, params = {}, &block)
-      return super unless @__last_virtual_node__
-      return super unless @__virtual_nodes__
+      return unless @__last_virtual_node__
+      return unless @__virtual_nodes__
       @__virtual_nodes__.pop
       class_params = @__last_virtual_node__.params.delete(:className)
       method_params = if clazz.end_with?('!')
