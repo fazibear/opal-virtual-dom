@@ -34,6 +34,8 @@ module VirtualDOM
     end
 
     def method_missing(clazz, params = {}, &block)
+      return super unless @__last_virtual_node__
+      return super unless @__virtual_nodes__
       @__virtual_nodes__.pop
       class_params = @__last_virtual_node__.params.delete(:className)
       method_params = if clazz.end_with?('!')
@@ -54,7 +56,6 @@ module VirtualDOM
       end
       arr.join(' ')
     end
-
 
     def process_params(params)
       return {} unless params.is_a?(Hash)
@@ -79,14 +80,8 @@ module VirtualDOM
       end
     end
 
-    # for backwards compatibility, you can return string
     def text(string)
       @__virtual_nodes__ << string.to_s
-    end
-
-    # for backwards compatibility
-    def virtual_dom(&block)
-      block.call
     end
 
     def to_vnode
@@ -95,6 +90,14 @@ module VirtualDOM
       else
         VirtualNode.new('div', {}, @__virtual_nodes__).to_n
       end
+    end
+
+    def class_names(hash)
+      class_names = []
+      hash.each do |key, value|
+        class_names << key if value
+      end
+      class_names.join(' ')
     end
   end
 end
