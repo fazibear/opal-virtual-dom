@@ -43,7 +43,7 @@ class SampleList
     p.id! do
       ul.simple_list.list(hook: Hook.method(method(:create_hook))) do
         @elements.each do |string|
-          li do
+          li class: class_names({empty: string.empty?}) do
             text string
           end
         end
