@@ -42,7 +42,7 @@ module VirtualDOM
                         { id: clazz[0..-2],
                           class: merge_string(class_params, params[:class]) }
                       else
-                        { class: merge_string(class_params, params[:class], clazz) }
+                        { class: merge_string(class_params, params[:class], clazz.gsub('_', '-').gsub('--', '_')) }
                       end
       params = @__last_virtual_node__.params.merge(params).merge(method_params)
       process_tag(@__last_virtual_node__.name, params, block)
@@ -61,6 +61,8 @@ module VirtualDOM
       return {} unless params.is_a?(Hash)
       params.dup.each do |k, v|
         case k
+          when 'for'
+            params['htmlFor'] = params.delete('for')
         when 'class'
           params['className'] = params.delete('class')
         when 'data'
