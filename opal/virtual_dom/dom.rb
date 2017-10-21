@@ -11,22 +11,24 @@ module VirtualDOM
 
     HTML_TAGS.each do |tag|
       define_method tag do |params = {}, &block|
-        process_tag(tag, params, block)
+        if params.is_a?(String)
+          process_tag(tag, {}, block, params)
+        elsif params.is_a?(Hash)
+          process_tag(tag, params, block)
+        end
       end
     end
 
-    def process_tag(tag, params, block)
+    def process_tag(tag, params, block, children = [])
       @__virtual_nodes__ ||= []
       if block
         current = @__virtual_nodes__
         @__virtual_nodes__ = []
-        result = block.call || ''
+        result = block.call || children
         vnode = VirtualNode.new(tag, process_params(params), @__virtual_nodes__.count.zero? ? result : @__virtual_nodes__)
         @__virtual_nodes__ = current
-      elsif params.is_a?(String)
-        vnode = VirtualNode.new(tag, {}, [params])
       else
-        vnode = VirtualNode.new(tag, process_params(params), [])
+        vnode = VirtualNode.new(tag, process_params(params), children)
       end
       @__last_virtual_node__ = vnode
       @__virtual_nodes__ << @__last_virtual_node__.to_n
@@ -37,6 +39,13 @@ module VirtualDOM
       return unless @__last_virtual_node__
       return unless @__virtual_nodes__
       @__virtual_nodes__.pop
+      children = []
+
+      if params.is_a?(String)
+        children = [params]
+        params = {}
+      end
+
       class_params = @__last_virtual_node__.params.delete(:className)
       method_params = if clazz.end_with?('!')
                         { id: clazz[0..-2],
@@ -45,7 +54,7 @@ module VirtualDOM
                         { class: merge_string(class_params, params[:class], clazz) }
                       end
       params = @__last_virtual_node__.params.merge(params).merge(method_params)
-      process_tag(@__last_virtual_node__.name, params, block)
+      process_tag(@__last_virtual_node__.name, params, block, children)
     end
 
     def merge_string(*params)
@@ -58,7 +67,6 @@ module VirtualDOM
     end
 
     def process_params(params)
-      return {} unless params.is_a?(Hash)
       params.dup.each do |k, v|
         case k
         when 'class'
