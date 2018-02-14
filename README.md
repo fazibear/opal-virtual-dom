@@ -21,7 +21,7 @@ require 'opal'
 require 'browser'     # not required
 require 'virtual_dom'
 
-# if you're using broser and you want to have events and elements wrapped
+# if you're using browser and you want to have events and elements wrapped
 require 'virtual_dom/support/browser'
 
 class SampleList
