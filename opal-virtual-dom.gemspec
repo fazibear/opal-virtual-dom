@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'opal-virtual-dom'
-  s.version     = '0.5.1'
+  s.version     = '0.6.0'
   s.authors     = ['Michał Kalbarczyk']
   s.email       = 'fazibear@gmail.com'
   s.homepage    = 'http://github.com/fazibear/opal-virtual-dom'
