@@ -40,7 +40,7 @@ class SampleList
     # to add class to elements
     # use bang method to define element id
 
-    # p id="example"
+    # <p id="example">
     p.example! do
       # <ul class="simple-list">
       ul.simple_list.list(hook: Hook.method(method(:create_hook))) do
